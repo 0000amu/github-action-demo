@@ -1,35 +1,74 @@
-name : etl pipeline
+name: ETL Pipeline
 
 on:
   push:
     branches:
       - main
-    
+
 jobs:
-  extract-job:
+
+  job1:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
       - name: Run extract.py
         run: python extract.py
 
 
-  transform-job:
-    needs: extract-job
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
       - name: Run transform.py
         run: python transform.py
 
 
-  load-job:
-    needs: transform-job
+  job3:
+    needs: job1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Run load.py
+        run: python load.py
+
+
+  job4:
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run load.py
+        run: python load.py
+
+
+  job5:
+    needs: job3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run load.py
+        run: python load.py
+
+
+  job6:
+    needs:
+      - job4
+      - job5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Run load.py
         run: python load.py
